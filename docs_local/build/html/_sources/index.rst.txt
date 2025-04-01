@@ -12,19 +12,17 @@ The tutorials are organized into three main sections:
   
 1. **Sphinx**: This section provides a guide to setting up a personalized research log using `Sphinx <https://www.sphinx-doc.org/en/master/>`_, a documentation generator that makes it easy to create and maintain documentation for your projects. As a bonus, it comes with an example on how to set up a python project and document its code and functions using `docstring <https://en.wikipedia.org/wiki/Docstring>`_, `Markdown <https://daringfireball.net/projects/markdown/>`_ and `reStructuredText <https://en.wikipedia.org/wiki/ReStructuredText>`_. 
   
-2. **fMRI**: This section provides a guide to preprocessing fMRI data using `FreeSurfer <https://surfer.nmr.mgh.harvard.edu/>`_, `AFNI <https://afni.nimh.nih.gov/>`_, `FSL <https://fsl.fmrib.ox.ac.uk/fsl/docs/#/>`_, `NeuroPythy <https://github.com/noahbenson/neuropythy/wiki>`_ , `Nilearn <https://nilearn.github.io/stable/index.html>`_, as well as other open source software packages.
+2. **fMRI**: This section provides a guide to preprocessing fMRI data using `FreeSurfer <https://surfer.nmr.mgh.harvard.edu/>`_, `AFNI <https://afni.nimh.nih.gov/>`_, `FSL <https://fsl.fmrib.ox.ac.uk/fsl/docs/#/>`_, `Neuropythy <https://github.com/noahbenson/neuropythy/wiki>`_ , `Nilearn <https://nilearn.github.io/stable/index.html>`_, as well as other open source software packages.
   
 3. **pRF**: This section provides a guide to computing population receptive fields using the `prfpy <https://prfpy.readthedocs.io/en/latest/>`_ package, a simple and clear python package for visual field mapping.
 
-4. **References**: This section provides a list of references cited in the tutorials, as well as additional resources for further reading.
-  
 
 
 .. raw:: html
 
 	<figure>
 		<iframe src="https://rawcdn.githack.com/nicogravel/researchLog_template/fd3cc222bb62b3bacf5a2d855a4adaf5748cbc62/docs_local/source/figures/pRF/lh_polar_3D.html" width="100%" height="500px" frameborder="0"></iframe>
-        <figcaption><strong>Figure 1:</strong> Population receptive field mapping of the left hemisphere visual cortex. Colorbar represent polar angle preferences across the cortical surface (colorbar units are in radians).</figcaption>
+        <figcaption><strong>Population receptive field (pRF) polar angle map.</strong> pRF maps were computed for the average of 4 visual field mapping (VFM) fMRI runs for left hemisphere. Colorbar represent polar angle preferences across the cortical surface (colorbar units are in radians).</figcaption>
 	</figure>
 
 
