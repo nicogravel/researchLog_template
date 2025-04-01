@@ -149,7 +149,7 @@ cd /home/ng281432/Documents/github_projects/researchLog_template/
 
 # Add, commit and push the changes
 git add .
-git commit -m "setting up dev node"
+git commit -m "commiting to new workstation"
 git push -u origin main
 
 

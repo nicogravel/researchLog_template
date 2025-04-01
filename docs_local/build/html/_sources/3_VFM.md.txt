@@ -4,7 +4,7 @@ title: "VFM"
 comments: true
 ---
 
-# [**TUTORIAL:**](https://nicogravel.github.io/researchLog_template/html/2_fMRI.html) <span style="color:lightblue">pRF mapping </span>
+# <span style="color:black">pRF mapping </span>
 
 
 In this tutorial, we will learn how to use [prfpy](https://github.com/VU-Cog-Sci/prfpy) to compute population receptive field maps using 7T-fMRI.
@@ -15,7 +15,7 @@ In this tutorial, we will learn how to use [prfpy](https://github.com/VU-Cog-Sci
 
 * Align repeated runs of a visual field mapping fMRI acquisition.  
 
-* Set up the right search [grids](https://prfpy.readthedocs.io/en/latest/model.html) for pRF parameter optimization.
+* Set up the right search [grid](https://prfpy.readthedocs.io/en/latest/model.html) for pRF parameter optimization.
 
 * Run pRF modelling using parallelization.
 
