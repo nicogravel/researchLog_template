@@ -461,7 +461,7 @@ echo "Affine registration completed for all corrected moving images."
 
 ```
 
-
+### Check alignment
 
 ```python
 from nilearn import image, surface, plotting, signal
@@ -549,9 +549,7 @@ So far all semi-automatic! Next steps:
 
 ## **2nd part**:  Mapping fMRI data to a cortical surface reconstruction
 
-Here we project the fMRI data to the cortical manifold reconstruction obtaind in freesurfer. Ideally, we want to include only gray matter voxels.  To better achieve this goal we 
-
- 
+Here we project the fMRI data to the cortical manifold reconstruction obtaind in freesurfer. Ideally, we want to include only gray matter voxels:  
 
 
 ```shell

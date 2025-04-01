@@ -529,6 +529,9 @@ cat<span class="w"> </span><span class="s">&lt;&lt;EOT &gt; ${pth}/acqparams.txt
 <span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Affine registration completed for all corrected moving images.&quot;</span>
 </pre></div>
 </div>
+</section>
+<section id="check-alignment">
+<h3><span class="section-number">2.2.9. </span>Check alignment<a class="headerlink" href="#check-alignment" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">nilearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">image</span><span class="p">,</span> <span class="n">surface</span><span class="p">,</span> <span class="n">plotting</span><span class="p">,</span> <span class="n">signal</span>
 
 <span class="n">anat_pth</span> <span class="o">=</span> <span class="s1">&#39;/home/nicolas/Documents/Paris/UNICOG/Analyses/fMRIdata/iCORTEX/sub-00/anat/&#39;</span>
@@ -555,7 +558,7 @@ cat<span class="w"> </span><span class="s">&lt;&lt;EOT &gt; ${pth}/acqparams.txt
 </table>
 </section>
 <section id="fine-tune-alignment">
-<h3><span class="section-number">2.2.9. </span>Fine-tune alignment<a class="headerlink" href="#fine-tune-alignment" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">2.2.10. </span>Fine-tune alignment<a class="headerlink" href="#fine-tune-alignment" title="Link to this heading">¶</a></h3>
 <p>Finally, for now, we check the results visually and apply manual corrections if needed:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use tkregister2 to verify the registration</span>
 <span class="k">for</span><span class="w"> </span>index<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="si">${#</span><span class="nv">moving_images</span><span class="p">[@]</span><span class="si">}</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
@@ -574,7 +577,7 @@ cat<span class="w"> </span><span class="s">&lt;&lt;EOT &gt; ${pth}/acqparams.txt
 </div>
 </section>
 <section id="visual-inspection">
-<h3><span class="section-number">2.2.10. </span>Visual inspection<a class="headerlink" href="#visual-inspection" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">2.2.11. </span>Visual inspection<a class="headerlink" href="#visual-inspection" title="Link to this heading">¶</a></h3>
 <p>Let us have a look at the registered data for a single run using <code class="docutils literal notranslate"><span class="pre">freeview</span></code>:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 
@@ -606,7 +609,7 @@ freeview<span class="w"> </span>-f<span class="w"> </span><span class="nv">$SUBJ
 </table>
 </section>
 <section id="summary-i">
-<h3><span class="section-number">2.2.11. </span>Summary I<a class="headerlink" href="#summary-i" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">2.2.12. </span>Summary I<a class="headerlink" href="#summary-i" title="Link to this heading">¶</a></h3>
 <p>So far all semi-automatic! Next steps:</p>
 <ul class="simple">
 <li><p>Fine-tuning of the functional-to-anaotmical volume alignment/co-registration (<em>e.g.</em> using <code class="docutils literal notranslate"><span class="pre">antsRegistration</span></code>).</p></li>
@@ -617,7 +620,7 @@ freeview<span class="w"> </span>-f<span class="w"> </span><span class="nv">$SUBJ
 </section>
 <section id="nd-part-mapping-fmri-data-to-a-cortical-surface-reconstruction">
 <h2><span class="section-number">2.3. </span><strong>2nd part</strong>:  Mapping fMRI data to a cortical surface reconstruction<a class="headerlink" href="#nd-part-mapping-fmri-data-to-a-cortical-surface-reconstruction" title="Link to this heading">¶</a></h2>
-<p>Here we project the fMRI data to the cortical manifold reconstruction obtaind in freesurfer. Ideally, we want to include only gray matter voxels.  To better achieve this goal we</p>
+<p>Here we project the fMRI data to the cortical manifold reconstruction obtaind in freesurfer. Ideally, we want to include only gray matter voxels:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the FreeSurfer subject directory</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">SUBJECTS_DIR</span><span class="o">=</span><span class="nv">$FREESURFER_HOME</span>/subjects
 
