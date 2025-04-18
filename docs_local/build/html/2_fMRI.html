@@ -422,37 +422,107 @@
 </section>
 <section id="apply-slice-timing-correction">
 <h3><span class="section-number">2.2.5. </span>Apply slice timing correction<a class="headerlink" href="#apply-slice-timing-correction" title="Link to this heading">¶</a></h3>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Slice time correct the NIfTI files using 3dTshift</span>
-<span class="k">for</span><span class="w"> </span>index<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="si">${#</span><span class="nv">moving_images</span><span class="p">[@]</span><span class="si">}</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">    </span><span class="nv">moving_nifti</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">pth</span><span class="si">}</span><span class="s2">/moving_images_</span><span class="si">${</span><span class="nv">index</span><span class="si">}</span><span class="s2">.nii.gz&quot;</span>
-<span class="w">    </span><span class="nv">static_nifti</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">pth</span><span class="si">}</span><span class="s2">/static_images_</span><span class="si">${</span><span class="nv">index</span><span class="si">}</span><span class="s2">.nii.gz&quot;</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># ==============================================</span>
+<span class="c1"># Slice Time Correction</span>
+<span class="c1"># ==============================================</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Starting slice time correction...&quot;</span>
 
+<span class="c1"># Loop through each task pattern</span>
+<span class="k">for</span><span class="w"> </span>pattern<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">task_patterns</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\nPerforming slice time correction for pattern: </span><span class="nv">$pattern</span><span class="s2">&quot;</span>
+
+<span class="w">  </span><span class="c1"># Determine the task output directory</span>
+<span class="w">  </span><span class="nv">task_output_dir</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">func_nifti</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">pattern</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="w">  </span><span class="c1"># Check if the task output directory exists</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">task_output_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Task output directory </span><span class="si">${</span><span class="nv">task_output_dir</span><span class="si">}</span><span class="s2"> not found, skipping&quot;</span>
+<span class="w">    </span><span class="k">continue</span>
+<span class="w">  </span><span class="k">fi</span>
+
+<span class="w">  </span><span class="c1"># Find all moving images in the task output directory</span>
+<span class="w">  </span>find<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">task_output_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*moving_images.nii.gz&quot;</span><span class="w"> </span>-print0<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nv">IFS</span><span class="o">=</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>-r<span class="w"> </span>-d<span class="w"> </span><span class="s1">$&#39;\0&#39;</span><span class="w"> </span>moving_nifti<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="c1"># Construct the tshifted file path</span>
+<span class="w">    </span><span class="nv">tshifted_nifti</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">moving_nifti</span><span class="p">/.nii.gz/_tshifted.nii.gz</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="w">    </span><span class="c1"># Check if the moving NIfTI file exists</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">moving_nifti</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">        </span>3dTshift<span class="w"> </span>-verbose<span class="w"> </span>-TR<span class="w"> </span><span class="m">2</span><span class="w"> </span>-tpattern<span class="w"> </span>altplus<span class="w"> </span>-ignore<span class="w"> </span><span class="m">0</span><span class="w"> </span>-tzero<span class="w"> </span><span class="m">0</span><span class="w"> </span>-Fourier<span class="w"> </span>-prefix<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">pth</span><span class="si">}</span><span class="s2">/tshift_moving_images_</span><span class="si">${</span><span class="nv">index</span><span class="si">}</span><span class="s2">.nii.gz&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">moving_nifti</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="w">    </span><span class="k">fi</span>
 
-<span class="w"> </span>
+<span class="w">        </span><span class="c1"># Extract SliceTiming and save to file</span>
+<span class="w">        </span><span class="nv">json_file</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">moving_nifti</span><span class="p">/.nii.gz/.json</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Extracting SliceTiming from: </span><span class="si">${</span><span class="nv">json_file</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="nv">slice_timing</span><span class="o">=</span><span class="k">$(</span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.SliceTiming[]&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$json_file</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;$!s/$/,/&#39;</span><span class="k">)</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$slice_timing</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;SliceTiming.txt&quot;</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;SliceTiming saved to: </span><span class="si">${</span><span class="nv">task_output_dir</span><span class="si">}</span><span class="s2">/SliceTiming.txt&quot;</span>
+
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Slice time correcting: </span><span class="si">${</span><span class="nv">moving_nifti</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="w">        </span>3dTshift<span class="w"> </span>-verbose<span class="w"> </span>-TR<span class="w"> </span><span class="m">1</span>.81<span class="w"> </span><span class="se">\</span>
+<span class="w">                </span>-tpattern<span class="w"> </span>@SliceTiming.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">                </span>-wsinc9<span class="w"> </span><span class="se">\</span>
+<span class="w">                </span>-prefix<span class="w"> </span><span class="si">${</span><span class="nv">tshifted_nifti</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">moving_nifti</span><span class="si">}</span>
+
+
+<span class="w">    </span><span class="k">else</span>
+<span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Moving image </span><span class="si">${</span><span class="nv">moving_nifti</span><span class="si">}</span><span class="s2"> not found, skipping&quot;</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">  </span><span class="k">done</span>
+
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Slice time correction completed for pattern &#39;</span><span class="nv">$pattern</span><span class="s2">&#39;&quot;</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;----------------------------------------&quot;</span>
 <span class="k">done</span>
 
-<span class="c1"># Print completion message</span>
 <span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Slice time correction completed for all images.&quot;</span>
 </pre></div>
 </div>
 </section>
 <section id="apply-motion-correction">
 <h3><span class="section-number">2.2.6. </span>Apply motion correction<a class="headerlink" href="#apply-motion-correction" title="Link to this heading">¶</a></h3>
-<p>There many options, here we apply within-scan rigid-body <span id="id3"><sup><a class="reference internal" href="References.html#id22" title="Oscar Nestares and David J. Heeger. Robust multiresolution alignment of mri brain volumes. Magnetic Resonance in Medicine, 43(5):705-715, 2000.">3</a></sup></span> using <code class="docutils literal notranslate"><span class="pre">AFNI</span></code>.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Motion correct the output of moving_images using 3dvolreg</span>
-<span class="k">for</span><span class="w"> </span>index<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="si">${#</span><span class="nv">moving_images</span><span class="p">[@]</span><span class="si">}</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">    </span><span class="nv">tshift_moving_nifti</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">pth</span><span class="si">}</span><span class="s2">/tshift_moving_images_</span><span class="si">${</span><span class="nv">index</span><span class="si">}</span><span class="s2">.nii.gz&quot;</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loop through each subdirectory</span>
+<span class="k">for</span><span class="w"> </span>process_dir<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nv">$sub_dirs</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
 
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">tshift_moving_nifti</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">        </span>3dvolreg<span class="w"> </span>-verbose<span class="w"> </span>-prefix<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">pth</span><span class="si">}</span><span class="s2">/volreg_moving_images_</span><span class="si">${</span><span class="nv">index</span><span class="si">}</span><span class="s2">.nii.gz&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">tshift_moving_nifti</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="c1"># Extract the directory name</span>
+<span class="w">    </span><span class="nv">dir_name</span><span class="o">=</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$process_dir</span><span class="s2">&quot;</span><span class="k">)</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Processing directory: </span><span class="nv">$dir_name</span><span class="s2">&quot;</span>
+
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Processing path: </span><span class="nv">$process_dir</span><span class="s2">/</span><span class="si">${</span><span class="nv">dir_name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="w">    </span><span class="nv">input_volume</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">process_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">dir_name</span><span class="si">}</span><span class="s2">_moving_images_corrected.nii.gz&quot;</span>
+
+<span class="w">    </span><span class="c1"># Define the file paths</span>
+
+<span class="w">    </span><span class="nv">output_motion_params</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$process_dir</span><span class="s2">/</span><span class="si">${</span><span class="nv">dir_name</span><span class="si">}</span><span class="s2">_motion_params.1D&quot;</span>
+<span class="w">    </span><span class="nv">output_affine_matrices</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$process_dir</span><span class="s2">/</span><span class="si">${</span><span class="nv">dir_name</span><span class="si">}</span><span class="s2">_affine_matrix.aff12.1D&quot;</span>
+<span class="w">    </span><span class="nv">output_motion_corrected</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$process_dir</span><span class="s2">/</span><span class="si">${</span><span class="nv">dir_name</span><span class="si">}</span><span class="s2">_wrun_motioncomp.nii.gz&quot;</span>
+
+<span class="w">    </span><span class="c1"># Ensure refVol.nii.gz does not exist</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">output_motion_corrected</span><span class="si">}</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;File </span><span class="nv">$output_motion_corrected</span><span class="s2"> exists. Removing it...&quot;</span>
+<span class="w">        </span>rm<span class="w"> </span><span class="si">${</span><span class="nv">output_motion_corrected</span><span class="si">}</span>
 <span class="w">    </span><span class="k">fi</span>
-<span class="k">done</span>
 
-<span class="c1"># Print completion message</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Motion correction completed for moving images.&quot;</span>
+<span class="w">    </span><span class="c1"># Get the dimensions using mri_info</span>
+<span class="w">    </span><span class="nv">dim</span><span class="o">=</span><span class="k">$(</span>mri_info<span class="w"> </span>--dim<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$input_volume</span><span class="s2">&quot;</span><span class="k">)</span>
+
+<span class="w">    </span><span class="c1"># Print the dimensions</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Dimensions: </span><span class="nv">$dim</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nv">x</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$dim</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="s2">&quot; &quot;</span><span class="w"> </span>-f1<span class="w">  </span><span class="sb">`</span><span class="w">      </span>
+<span class="w">    </span><span class="nv">y</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$dim</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="s2">&quot; &quot;</span><span class="w"> </span>-f2<span class="w">  </span><span class="sb">`</span><span class="w">      </span>
+<span class="w">    </span><span class="nv">z</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$dim</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="s2">&quot; &quot;</span><span class="w"> </span>-f3<span class="w">  </span><span class="sb">`</span><span class="w">      </span>
+<span class="w">    </span><span class="nv">t</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$dim</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="s2">&quot; &quot;</span><span class="w"> </span>-f4<span class="w">  </span><span class="sb">`</span><span class="w">      </span>
+
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Performing motion correction for </span><span class="si">${</span><span class="nv">input_volume</span><span class="si">}</span><span class="s2">...&quot;</span>
+
+<span class="w">    </span>3dvolreg<span class="w"> </span>-verbose<span class="w"> </span><span class="se">\</span>
+<span class="w">            </span>-base<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="se">\</span>
+<span class="w">            </span>-1Dfile<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">output_motion_params</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">            </span>-1Dmatrix_save<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">output_affine_matrices</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">            </span>-zpad<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">            </span>-prefix<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">output_motion_corrected</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">            </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">input_volume</span><span class="si">}</span><span class="s2">&quot;</span><span class="w">            </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Motion compensation parameters extracted for run </span><span class="si">${</span><span class="nv">index</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">done</span>
 </pre></div>
 </div>
 </section>
