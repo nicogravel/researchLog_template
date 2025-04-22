@@ -340,40 +340,111 @@ echo "dcm2niix_afni processing and renaming completed for all images."
 ### Apply slice timing correction
 
 ```shell
-# Slice time correct the NIfTI files using 3dTshift
-for index in $(seq 1 ${#moving_images[@]}); do
-    moving_nifti="${pth}/moving_images_${index}.nii.gz"
-    static_nifti="${pth}/static_images_${index}.nii.gz"
+# ==============================================
+# Slice Time Correction
+# ==============================================
+echo "Starting slice time correction..."
 
+# Loop through each task pattern
+for pattern in "${task_patterns[@]}"; do
+  echo -e "\nPerforming slice time correction for pattern: $pattern"
+
+  # Determine the task output directory
+  task_output_dir="${func_nifti}/${pattern}"
+
+  # Check if the task output directory exists
+  if [ ! -d "${task_output_dir}" ]; then
+    echo "Task output directory ${task_output_dir} not found, skipping"
+    continue
+  fi
+
+  # Find all moving images in the task output directory
+  find "${task_output_dir}" -name "*moving_images.nii.gz" -print0 | while IFS= read -r -d $'\0' moving_nifti; do
+    # Construct the tshifted file path
+    tshifted_nifti="${moving_nifti/.nii.gz/_tshifted.nii.gz}"
+
+    # Check if the moving NIfTI file exists
     if [ -f "${moving_nifti}" ]; then
-        3dTshift -verbose -TR 2 -tpattern altplus -ignore 0 -tzero 0 -Fourier -prefix "${pth}/tshift_moving_images_${index}.nii.gz" "${moving_nifti}"
-    fi
 
- 
+        # Extract SliceTiming and save to file
+        json_file="${moving_nifti/.nii.gz/.json}"
+        echo "Extracting SliceTiming from: ${json_file}"
+        slice_timing=$(jq -r '.SliceTiming[]' "$json_file" | sed '$!s/$/,/')
+        echo "$slice_timing" > "SliceTiming.txt"
+        echo "SliceTiming saved to: ${task_output_dir}/SliceTiming.txt"
+
+        echo "Slice time correcting: ${moving_nifti}"
+
+        3dTshift -verbose -TR 1.81 \
+                -tpattern @SliceTiming.txt \
+                -wsinc9 \
+                -prefix ${tshifted_nifti} ${moving_nifti}
+
+
+    else
+      echo "Moving image ${moving_nifti} not found, skipping"
+    fi
+  done
+
+  echo "Slice time correction completed for pattern '$pattern'"
+  echo "----------------------------------------"
 done
 
-# Print completion message
 echo "Slice time correction completed for all images."
-
 
 ```
 
 ### Apply motion correction
 
-There many options, here we apply within-scan rigid-body {cite:p}`Nestares_2000` using `AFNI`. 
+
 
 ```shell
-# Motion correct the output of moving_images using 3dvolreg
-for index in $(seq 1 ${#moving_images[@]}); do
-    tshift_moving_nifti="${pth}/tshift_moving_images_${index}.nii.gz"
+# Loop through each subdirectory
+for process_dir in $sub_dirs; do
 
-    if [ -f "${tshift_moving_nifti}" ]; then
-        3dvolreg -verbose -prefix "${pth}/volreg_moving_images_${index}.nii.gz" "${tshift_moving_nifti}"
+    # Extract the directory name
+    dir_name=$(basename "$process_dir")
+    echo "Processing directory: $dir_name"
+
+    echo "Processing path: $process_dir/${dir_name}"
+
+    input_volume="${process_dir}/${dir_name}_moving_images_corrected.nii.gz"
+
+    # Define the file paths
+
+    output_motion_params="$process_dir/${dir_name}_motion_params.1D"
+    output_affine_matrices="$process_dir/${dir_name}_affine_matrix.aff12.1D"
+    output_motion_corrected="$process_dir/${dir_name}_wrun_motioncomp.nii.gz"
+
+    # Ensure refVol.nii.gz does not exist
+    if [ -f ${output_motion_corrected} ]; then
+        echo "File $output_motion_corrected exists. Removing it..."
+        rm ${output_motion_corrected}
     fi
+
+    # Get the dimensions using mri_info
+    dim=$(mri_info --dim "$input_volume")
+
+    # Print the dimensions
+    echo "Dimensions: $dim"
+    x=`echo $dim | cut -d" " -f1  `      
+    y=`echo $dim | cut -d" " -f2  `      
+    z=`echo $dim | cut -d" " -f3  `      
+    t=`echo $dim | cut -d" " -f4  `      
+
+    echo "Performing motion correction for ${input_volume}..."
+
+    3dvolreg -verbose \
+            -base 0 \
+            -1Dfile "${output_motion_params}" \
+            -1Dmatrix_save "${output_affine_matrices}" \
+            -zpad 4 \
+            -prefix "${output_motion_corrected}" \
+            "${input_volume}"            
+    
+    echo "Motion compensation parameters extracted for run ${index}"
 done
 
-# Print completion message
-echo "Motion correction completed for moving images."
 
 ```
 

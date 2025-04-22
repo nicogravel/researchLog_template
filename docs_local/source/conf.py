@@ -149,7 +149,7 @@ cd /home/ng281432/Documents/github_projects/researchLog_template/
 
 # Add, commit and push the changes
 git add .
-git commit -m "updated slice timing correction and motion correction"
+git commit -m "Added section on how to work from a second computer"
 git push -u origin main
 
 

@@ -208,8 +208,27 @@ Now enjoy building up your python package!
 </details>
   
 <br>
-  
+
+<details>
+  <summary><span style="color:#3382FF"> 7.- Edit, make and commit from another computer</span></summary>  
+
+  You need to [setup a SSH key on a second computer](https://stackoverflow.com/questions/8753014/how-to-setup-github-ssh-key-on-second-computer) 
+
+  Then you can [fetch the online version](https://stackoverflow.com/questions/6335681/how-do-i-get-the-latest-version-of-my-code) and see whether there are local changes in conflict:
+
+  ```shell
+  git fetch origin
+  git status
+  ```
+
+  If you get this `Your branch is behind 'origin/master' by 1 commit, and can be fast-forwarded.` then simply get the latest online version 'git pull'.
+
+  I you run into conflicts [see here](https://stackoverflow.com/questions/6335681/how-do-i-get-the-latest-version-of-my-code) for a detailed overview.
  
+
+ </details>
+  
+<br>
 
 
 

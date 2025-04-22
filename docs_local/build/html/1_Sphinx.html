@@ -259,6 +259,18 @@ make<span class="w"> </span>html
 </div>
 </details>
 <br>
+<details>
+  <summary><span style="color:#3382FF"> 7.- Edit, make and commit from another computer</span></summary>  
+<p>You need to <a class="reference external" href="https://stackoverflow.com/questions/8753014/how-to-setup-github-ssh-key-on-second-computer">setup a SSH key on a second computer</a></p>
+<p>Then you can <a class="reference external" href="https://stackoverflow.com/questions/6335681/how-do-i-get-the-latest-version-of-my-code">fetch the online version</a> and see whether there are local changes in conflict:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>fetch<span class="w"> </span>origin
+git<span class="w"> </span>status
+</pre></div>
+</div>
+<p>If you get this <code class="docutils literal notranslate"><span class="pre">Your</span> <span class="pre">branch</span> <span class="pre">is</span> <span class="pre">behind</span> <span class="pre">'origin/master'</span> <span class="pre">by</span> <span class="pre">1</span> <span class="pre">commit,</span> <span class="pre">and</span> <span class="pre">can</span> <span class="pre">be</span> <span class="pre">fast-forwarded.</span></code> then simply get the latest online version ‘git pull’.</p>
+<p>I you run into conflicts <a class="reference external" href="https://stackoverflow.com/questions/6335681/how-do-i-get-the-latest-version-of-my-code">see here</a> for a detailed overview.</p>
+ </details>
+<br>
 <section id="comments">
 <h2><span class="section-number">1.1. </span><span style="color:lightblue">Comments 🔨</span><a class="headerlink" href="#comments" title="Link to this heading">¶</a></h2>
 <script src="https://giscus.app/client.js"
