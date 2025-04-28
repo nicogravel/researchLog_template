@@ -1,19 +1,22 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>1. Research handbook &#8212; researchLog  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
-    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=3f530b75" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=222043ce" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=6df03519" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=6df03519" />
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="2. Surface-based fMRI" href="2_fMRI.html" />
@@ -23,11 +26,11 @@
   </head><body>
   <div class="document">
     
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="index.html">
-    <img class="logo" src="_static/logo.png" alt="Logo" />
+    <img class="logo" src="_static/logo.png" alt="Logo"/>
     
   </a>
 </p>
@@ -65,7 +68,7 @@
   </ul></li>
 </ul>
 </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -73,7 +76,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
 
 
@@ -107,7 +110,7 @@
           <div class="body" role="main">
             
   <section class="tex2jax_ignore mathjax_ignore" id="research-handbook">
-<h1><span class="section-number">1. </span><span style="color:black">Research handbook</span><a class="headerlink" href="#research-handbook" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">1. </span><span style="color:black">Research handbook</span><a class="headerlink" href="#research-handbook" title="Permalink to this heading">¶</a></h1>
 <p>This tutorial is a collaborative effort with <a class="reference external" href="https://github.com/chrplr">Christophe Pallier</a> and <a class="reference external" href="https://bsky.app/profile/zhanminye.bsky.social">Minye Zhan</a>. Please see <a class="reference external" href="https://github.com/chrplr/mynotebook">here</a> for a boiled down version of it. The requirements are specificed in the file <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> within the <a class="reference external" href="https://github.com/nicogravel/researchLog_template">main repo’s branch</a>. There you can find everything needed to reproduce <a class="reference external" href="https://nicogravel.github.io/researchLog_template">this page</a>.The steps outlined here should be tailored to meet your specific needs.</p>
 <details>
   <summary><span style="color:#3382FF"> 1.- Set up research project codebook folder using Python, Sphinx and Github</span></summary>  
@@ -250,11 +253,11 @@ make<span class="w"> </span>html
 </pre></div>
 </div>
 <p>After adding new code and document everything, working on docstrings, etc, do not forget to commit the changes to Github and update both the documentation and the package. For example, if you write new python functions, do:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-<span class="w"> </span>sphinx-apidoc<span class="w"> </span>-f<span class="w"> </span>-o<span class="w"> </span>docs_local/source<span class="w"> </span>myCodeIsYourCode
-<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>.
-<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;replace setup.py for pyproject.toml, updates in docstrings, etc&quot;</span>
-<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main<span class="err">&#39;</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span> pip install -e .
+ sphinx-apidoc -f -o docs_local/source myCodeIsYourCode
+ git add .
+ git commit -m &quot;replace setup.py for pyproject.toml, updates in docstrings, etc&quot;
+ git push -u origin main&#39;
 </pre></div>
 </div>
 </details>
@@ -272,7 +275,7 @@ git<span class="w"> </span>status
  </details>
 <br>
 <section id="comments">
-<h2><span class="section-number">1.1. </span><span style="color:lightblue">Comments 🔨</span><a class="headerlink" href="#comments" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">1.1. </span><span style="color:lightblue">Comments 🔨</span><a class="headerlink" href="#comments" title="Permalink to this heading">¶</a></h2>
 <script src="https://giscus.app/client.js"
         data-repo="nicogravel/researchLog_template"
         data-repo-id="R_kgDON90EnA"
@@ -288,7 +291,8 @@ git<span class="w"> </span>status
         data-loading="lazy"
         crossorigin="anonymous"
         async>
-</script></section>
+</script>
+</section>
 </section>
 
 
@@ -314,7 +318,7 @@ git<span class="w"> </span>status
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &#169;.
+      &copy;.
       
       |
       <a href="_sources/1_Sphinx.md.txt"

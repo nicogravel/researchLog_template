@@ -132,24 +132,28 @@ https://www.patrickthurmond.com/blog/2023/12/11/commenting-is-available-now-than
 pyenv activate Sphinx
 
 # Navigate to the directory containing the conf.py file
-#cd /home/nicolas/Documents/GitHubProjects/researchLog_template/docs_local/
+cd /home/nicolas/Documents/GitHubProjects/researchLog_template/docs_local/
 #cd /home/ng281432/Documents/github_projects/LabHacks/docs_local/
-cd /home/ng281432/Documents/github_projects/researchLog_template/docs_local
+#cd /home/ng281432/Documents/github_projects/researchLog_template/docs_local
 
 # Build the html files
 make clean;  make html
 
 
 # Sync the html files to the docs folder
-rsync -a --delete /home/ng281432/Documents/github_projects/researchLog_template/docs_local/build/html /home/ng281432/Documents/github_projects/researchLog_template/docs/
+#rsync -a --delete /home/ng281432/Documents/github_projects/researchLog_template/docs_local/build/html /home/ng281432/Documents/github_projects/researchLog_template/docs/
+
+
+rsync -a --delete /home/nicolas/Documents/GitHubProjects/researchLog_template/docs_local/build/html //home/nicolas/Documents/GitHubProjects/researchLog_template/docs/
 
 # Navigate to the directory containing the conf.py file
 #cd /home/ng281432/Documents/github_projects/LabHacks/
-cd /home/ng281432/Documents/github_projects/researchLog_template/
+# cd /home/ng281432/Documents/github_projects/researchLog_template/
+cd /home/nicolas/Documents/GitHubProjects/researchLog_template/ 
 
 # Add, commit and push the changes
 git add .
-git commit -m "Added section on how to work from a second computer"
+git commit -m "added notebook to TOC"
 git push -u origin main
 
 
