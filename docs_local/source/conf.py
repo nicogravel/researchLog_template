@@ -154,7 +154,7 @@ cd /home/nicolas/Documents/GitHubProjects/researchLog_template/
 
 # Add, commit and push the changes
 git add .
-git commit -m "Docs: mentioned Giscus for comments"
+git commit -m "Added link to Python"
 git push -u origin main
 
 

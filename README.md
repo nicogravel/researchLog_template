@@ -4,6 +4,9 @@ See here, for the Github page: https://nicogravel.github.io/researchLog_template
 
 This tutorial is a collaborative effort with [Christophe Pallier](https://github.com/chrplr). Please see [here](https://github.com/chrplr/mynotebook) for a boiled down version of it. 
 
+For en excellent introduction to statistics, machine learning and scientific programming in Python, see [here](https://duchesnay.github.io/pystatsml/) and [here](https://etulab.univ-amu.fr/gilson.m/compneuro_course/).
+
+
 The following instructions serve as a template; modify them as needed to suit your project:
 
 
