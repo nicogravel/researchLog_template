@@ -235,7 +235,7 @@ Now enjoy building up your python package!
 
 
 
-For en excellent introduction to statistics, machine learning and scientific programming in Python, see [here](https://duchesnay.github.io/pystatsml/) and [here](https://etulab.univ-amu.fr/gilson.m/compneuro_course/).
+For an excellent introduction to statistics, machine learning and scientific programming in Python, see [here](https://duchesnay.github.io/pystatsml/) and [here](https://etulab.univ-amu.fr/gilson.m/compneuro_course/).
 
 
 ## **Questions?** 🔨

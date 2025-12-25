@@ -154,7 +154,7 @@ cd /home/nicolas/Documents/GitHubProjects/researchLog_template/
 
 # Add, commit and push the changes
 git add .
-git commit -m "Added link to Python"
+git commit -m "Important links"
 git push -u origin main
 
 
